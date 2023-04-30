@@ -15,7 +15,8 @@
 				"issues": "https://github.com/heipiao233/quilt-plugins-and-chasm/issues",
 				"sources": "https://github.com/QuiltMC/quilt-plugins-and-chasm"
 			},
-			"icon": "assets/qpac/icon.png"
+			"icon": "assets/qpac/icon.png",
+			"license": "MIT"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
