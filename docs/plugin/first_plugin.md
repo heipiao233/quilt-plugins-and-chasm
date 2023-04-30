@@ -20,4 +20,49 @@ loom {
 
 `Goodbye from QPAC plugin!`
 
-显然可以直接
+显然可以直接在 `load` 和 `unload` 当中加入日志代码。最终代码如下：
+```java
+package net.heipiao.qpac.plugin;
+
+import org.quiltmc.loader.api.LoaderValue;
+import org.quiltmc.loader.api.plugin.QuiltLoaderPlugin;
+import org.quiltmc.loader.api.plugin.QuiltPluginContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+
+public class QPACPlugin implements QuiltLoaderPlugin {
+	public static final Logger LOGGER = LoggerFactory.getLogger("QPAC Plugin");
+    
+	@Override
+	public void load(QuiltPluginContext context, Map<String, LoaderValue> previousData) {
+		LOGGER.info("Hello from QPAC plugin!");
+	}
+
+	@Override
+	public void unload(Map<String, LoaderValue> data) {
+		LOGGER.info("Goodbye from QPAC plugin!");
+	}
+}
+```
+然而光光这一个类，Quilt 加载器是绝不可能识别到的。因此，需要在 `quilt.mod.json` 的根对象中加入 `experimental_quilt_loader_plugin` 字段。
+该字段内容应如下
+```json
+{
+    "class": "net.heipiao.qpac.plugin.QPACPlugin",
+    "packages": [
+        "net.heipiao.qpac.plugin"
+    ]
+}
+```
+`class` 表示我们插件的类名，`packages` 表示我们插件可以直接访问的类，不经过任何处理，例如 Mixin、AW 和 Chasm。
+
+启动游戏，提示”错误“和我们的日志：
+```
+[12:56:48] [main/INFO] (Quilt Loader/GameProvider) Loading Minecraft 1.19.4 with Quilt Loader 0.19.0-beta.13
+[12:56:48] [main/ERROR] (Quilt Loader) MOD qpac PROVIDES A PLUGIN!MOD-PROVIDED PLUGINS ARE FOR AMUSEMENT PURPOSES ONLY. NO WARRANTY IS PROVIDED, EXPRESS OR IMPLIED. CONTINUE AT YOUR OWN RISK.
+2023-04-30 12:56:49,398 main WARN Error parsing URI E:\quilt-plugins-and-chasm\.gradle\quilt-loom-cache\log4j.xml
+[12:56:49] [main/INFO] (QPAC Plugin) Hello from QPAC plugin!
+```
+可以看到，插件的加载时间是非常早的。实际上，它在 `runInternal` 的第二轮循环开始时就运行了 （第一轮只运行内置插件）。
