@@ -1,19 +1,25 @@
 package net.heipiao.qpac.plugin;
 
+import net.heipiao.qpac.QPAC;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.TitleScreen;
 import org.quiltmc.loader.api.LoaderValue;
 import org.quiltmc.loader.api.plugin.QuiltLoaderPlugin;
 import org.quiltmc.loader.api.plugin.QuiltPluginContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class QPACPlugin implements QuiltLoaderPlugin {
+	public static final Logger LOGGER = LoggerFactory.getLogger("QPAC Plugin");
 	@Override
 	public void load(QuiltPluginContext context, Map<String, LoaderValue> previousData) {
-		System.out.println("Hello from QPAC plugin!");
+		LOGGER.info("Hello from QPAC plugin!");
 	}
 
 	@Override
 	public void unload(Map<String, LoaderValue> data) {
-		System.out.println("Goodbye from QPAC plugin!");
+		LOGGER.info("Goodbye from QPAC plugin!");
 	}
 }
