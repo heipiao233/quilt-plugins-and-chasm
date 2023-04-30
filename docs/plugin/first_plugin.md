@@ -66,3 +66,5 @@ public class QPACPlugin implements QuiltLoaderPlugin {
 [12:56:49] [main/INFO] (QPAC Plugin) Hello from QPAC plugin!
 ```
 可以看到，插件的加载时间是非常早的。实际上，它在 `runInternal` 的第二轮循环开始时就运行了 （第一轮只运行内置插件）。
+
+这些代码在仓库的 `first_plugin` tag 里。
