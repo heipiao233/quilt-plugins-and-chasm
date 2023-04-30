@@ -13,6 +13,10 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	maven {
+		name = 'Quilt Snapshot'
+		url = 'https://maven.quiltmc.org/repository/snapshot'
+	}
 }
 
 // All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
@@ -33,6 +37,8 @@ dependencies {
 	// Quilted Fabric API will automatically pull in the correct QSL version.
 	modImplementation libs.quilted.fabric.api
 	// modImplementation libs.bundles.quilted.fabric.api // If you wish to use Fabric API's deprecated modules, you can replace the above line with this one
+	modImplementation libs.quilt.chasm
+	modImplementation libs.quilt.chassembly
 }
 
 processResources {
@@ -47,6 +53,13 @@ tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = 'UTF-8'
 	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
 	it.options.release = 17
+}
+
+loom {
+	runs.all {
+		property("loader.experimental.allow_loading_plugins", "true")
+		property("loader.experimental.enable_chasm", "true")
+	}
 }
 
 java {
